@@ -1,0 +1,41 @@
+<plugin name='mars-security' version='0.6' grailsVersion='2.2 &gt; *'>
+  <author>Daniel Bower</author>
+  <authorEmail>daniel.bower@infinum.com</authorEmail>
+  <title>Mars Security Plugin</title>
+  <description>Security Implementation for Mars Grails Apps
+</description>
+  <documentation>http://grails.org/plugin/mars-security</documentation>
+  <type>MarsSecurityGrailsPlugin</type>
+  <resources>
+    <resource>MarsSecurityCodeNarcRules</resource>
+    <resource>com.mars.security.LoginController</resource>
+  </resources>
+  <repositories>
+    <repository name='grailsCentral' url='http://grails.org/plugins' />
+    <repository name='mavenCentral' url='http://repo1.maven.org/maven2/' />
+  </repositories>
+  <dependencies>
+    <compile>
+      <dependency group='org.springframework.security' name='spring-security-ldap' version='3.0.7.RELEASE' />
+      <dependency group='org.springframework.security' name='spring-security-config' version='3.0.7.RELEASE' />
+    </compile>
+    <provided>
+      <dependency group='net.sourceforge.jtds' name='jtds' version='1.2.4' />
+    </provided>
+    <runtime>
+      <dependency group='org.apache.directory.shared' name='shared-ldap' version='0.9.17' />
+      <dependency group='org.apache.directory.server' name='apacheds-protocol-ldap' version='1.5.5' />
+      <dependency group='org.apache.directory.server' name='apacheds-core' version='1.5.5' />
+    </runtime>
+  </dependencies>
+  <plugins>
+    <compile>
+      <plugin group='org.grails.plugins' name='spring-security-core' version='1.2.7.3' />
+    </compile>
+    <provided>
+      <plugin group='org.grails.plugins' name='codenarc' version='0.20' />
+    </provided>
+  </plugins>
+  <runtimePluginRequirements />
+  <behavior />
+</plugin>
