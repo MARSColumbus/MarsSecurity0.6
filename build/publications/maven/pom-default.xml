@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com.mars</groupId>
+  <artifactId>MarsSecurity</artifactId>
+  <version>8.0</version>
+  <dependencies>
+    <dependency>
+      <groupId>org.springframework.security</groupId>
+      <artifactId>spring-security-ldap</artifactId>
+      <version>4.2.17.RELEASE</version>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.security</groupId>
+      <artifactId>spring-security-config</artifactId>
+      <version>4.2.17.RELEASE</version>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.grails.plugins</groupId>
+      <artifactId>spring-security-core</artifactId>
+      <version>3.2.3</version>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>net.sourceforge.jtds</groupId>
+      <artifactId>jtds</artifactId>
+      <version>1.2.4</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.bertramlabs.plugins</groupId>
+      <artifactId>asset-pipeline-grails</artifactId>
+      <version>2.14.2</version>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.directory.server</groupId>
+      <artifactId>apacheds-core</artifactId>
+      <version>1.5.5</version>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.directory.server</groupId>
+      <artifactId>apacheds-protocol-ldap</artifactId>
+      <version>1.5.5</version>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.directory.shared</groupId>
+      <artifactId>shared-ldap</artifactId>
+      <version>0.9.17</version>
+      <scope>runtime</scope>
+    </dependency>
+  </dependencies>
+  <name>My Plugin</name>
+  <description>Full plugin description</description>
+  <url>https://github.com/foo/bar</url>
+  <licenses>
+    <license>
+      <name>The Apache Software License, Version 2.0</name>
+      <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+      <distribution>repo</distribution>
+    </license>
+  </licenses>
+  <scm>
+    <url>https://github.com/foo/bar</url>
+    <connection>scm:git@github.com:foo/bar.git</connection>
+    <developerConnection>scm:git@github.com:foo/bar.git</developerConnection>
+  </scm>
+  <issueManagement>
+    <system>Github Issues</system>
+    <url>https://github.com/foo/bar/issues</url>
+  </issueManagement>
+  <developers>
+    <developer>
+      <id>johndoe</id>
+      <name>John Doe</name>
+    </developer>
+  </developers>
+</project>
