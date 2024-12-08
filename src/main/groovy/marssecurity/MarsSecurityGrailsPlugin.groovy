@@ -17,7 +17,7 @@ import com.mars.security.UserRoleService
 
 class MarsSecurityGrailsPlugin extends Plugin {
     // the plugin version
-    def version = "0.8"
+    def version = "0.9"
     // the version or versions of Grails the plugin is designed for
     def grailsVersion = "2.2 > *"
 	List loadAfter = ['springSecurityCore']
@@ -71,7 +71,7 @@ Security Implementation for Mars Grails Apps
 						conf.ldap.local.context.server)
 
 				ldapAuthenticatorLocal(BindAuthenticator, contextSourceLocal) {
-					userDnPatterns = conf.ldap.local.context.userDnPatterns
+					userDnPatterns = conf.ldap.context.userDnPatterns
 				}
 
 				ldapAuthProviderLocal(LdapAuthenticationProvider,
