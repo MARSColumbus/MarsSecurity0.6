@@ -1,8 +1,9 @@
 package com.mars.security
 
 import grails.gorm.transactions.Transactional
-import org.apache.log4j.Logger
+import org.slf4j.Logger
 import grails.plugin.springsecurity.SpringSecurityUtils
+import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.ldap.core.DirContextAdapter
 import org.springframework.ldap.core.DirContextOperations
@@ -14,7 +15,7 @@ import org.springframework.security.ldap.userdetails.UserDetailsContextMapper
 @Transactional
 class MarsUserService implements UserDetailsContextMapper{
 
-	private static final Logger LOGGER = Logger.getLogger(MarsUserService)
+	private static final Logger LOGGER = LoggerFactory.getLogger(MarsUserService)
 
 	/**
 	 * Some Spring Security classes (e.g. RoleHierarchyVoter) expect at least one role, so
@@ -33,9 +34,8 @@ class MarsUserService implements UserDetailsContextMapper{
 	@Autowired
 	UserRoleService userRoleService
 
-	UserDetails mapUserFromContext(DirContextOperations ctx,
-			String username, Collection<GrantedAuthority> authorities) {
-
+	@Override
+	UserDetails mapUserFromContext(DirContextOperations ctx, String username, Collection<? extends GrantedAuthority> authorities) {
 		LOGGER.debug("BEGIN : mapUserFromContext(): $username")
 
 		//look up user profile in database

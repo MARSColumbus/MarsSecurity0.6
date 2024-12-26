@@ -63,7 +63,7 @@ Security Implementation for Mars Grails Apps
 			ldapUserDetailsMapper(MarsUserService)
 
 			if (conf.ldap.enableLocal) {
-				println "Enabling local ldap ${conf.ldap.localcontext.server}"
+				println "Enabling local ldap ${conf.ldap.local.context.server}"
 
 				security.'ldap-server'('ldif': 'file:/usr/local/etc/mars/users.ldif')
 

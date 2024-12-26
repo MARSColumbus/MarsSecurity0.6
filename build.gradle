@@ -5,7 +5,7 @@ buildscript {
     }
     dependencies {
         classpath "org.grails:grails-gradle-plugin:$grailsVersion"
-        classpath "com.bertramlabs.plugins:asset-pipeline-gradle:2.14.2"
+//        classpath "com.bertramlabs.plugins:asset-pipeline-gradle:2.14.2"
     }
 }
 
@@ -15,9 +15,10 @@ group "com.mars"
 apply plugin:"eclipse"
 apply plugin:"idea"
 apply plugin:"org.grails.grails-plugin"
-apply plugin:"org.grails.grails-plugin-publish"
-apply plugin:"asset-pipeline"
+//apply plugin:"org.grails.grails-plugin-publish"
+//apply plugin:"asset-pipeline"
 apply plugin:"org.grails.grails-gsp"
+apply plugin:"maven-publish"
 
 repositories {
     mavenLocal()
@@ -25,45 +26,49 @@ repositories {
 }
 
 dependencies {
-    compile "org.springframework.boot:spring-boot-starter-logging"
-    compile "org.springframework.boot:spring-boot-autoconfigure"
-    compile "org.grails:grails-core"
-    compile "org.springframework.boot:spring-boot-starter-actuator"
-    compile "org.springframework.boot:spring-boot-starter-tomcat"
-    compile "org.grails:grails-web-boot"
-    compile "org.grails:grails-logging"
-    compile "org.grails:grails-plugin-rest"
-    compile "org.grails:grails-plugin-databinding"
-    compile "org.grails:grails-plugin-i18n"
-    compile "org.grails:grails-plugin-services"
-//    compile "org.grails:grails-plugin-url-mappings"
-    compile "org.grails:grails-plugin-interceptors"
-    compile "org.grails.plugins:cache"
-    compile "org.grails.plugins:async"
-    compile "org.grails.plugins:scaffolding"
-    compile "org.grails.plugins:gsp"
+    implementation "org.springframework.boot:spring-boot-starter-logging"
+    implementation "org.springframework.boot:spring-boot-autoconfigure"
+    implementation "org.grails:grails-core"
+    implementation "org.springframework.boot:spring-boot-starter-actuator"
+    implementation "org.springframework.boot:spring-boot-starter-tomcat"
+    implementation "org.grails:grails-web-boot"
+    implementation "org.grails:grails-logging"
+    implementation "org.grails:grails-plugin-rest"
+    implementation "org.grails:grails-plugin-databinding"
+    implementation "org.grails:grails-plugin-i18n"
+    implementation "org.grails:grails-plugin-services"
+//    implementation "org.grails:grails-plugin-url-mappings"
+    implementation "org.grails:grails-plugin-interceptors"
+    implementation "org.grails.plugins:cache"
+    implementation "org.grails.plugins:async"
+    implementation "org.grails.plugins:scaffolding"
+    implementation "org.grails.plugins:gsp"
     console "org.grails:grails-console"
     profile "org.grails.profiles:web-plugin"
-    provided "org.grails:grails-plugin-services"
-    provided "org.grails:grails-plugin-domain-class"
-    runtime "com.bertramlabs.plugins:asset-pipeline-grails:2.14.2"
-    testCompile "org.grails:grails-gorm-testing-support"
-    testCompile "org.grails:grails-plugin-testing"
-    testCompile "org.grails.plugins:geb"
-    testCompile "org.grails:grails-web-testing-support"
-    testRuntime "org.seleniumhq.selenium:selenium-htmlunit-driver:2.47.1"
-    testRuntime "net.sourceforge.htmlunit:htmlunit:2.18"
+//    provided "org.grails:grails-plugin-services"
+//    provided "org.grails:grails-plugin-domain-class"
+    implementation "org.grails:grails-plugin-services"
+    implementation "org.grails:grails-plugin-domain-class"
+    runtimeOnly "com.bertramlabs.plugins:asset-pipeline-grails:2.14.2"
+    testImplementation "org.grails:grails-gorm-testing-support"
+    testImplementation "org.grails:grails-plugin-testing"
+    testImplementation "org.grails.plugins:geb"
+    testImplementation "org.grails:grails-web-testing-support"
+    testImplementation "org.seleniumhq.selenium:selenium-htmlunit-driver:2.47.1"
+    testImplementation "net.sourceforge.htmlunit:htmlunit:2.18"
 
-    // Grails 3
-    compile group: 'org.springframework.security', name: 'spring-security-ldap', version: '4.2.17.RELEASE'
-    compile group: 'org.springframework.security', name: 'spring-security-config', version: '4.2.17.RELEASE'
-    compile group: 'org.springframework.security', name: 'spring-security-web', version: '4.2.17.RELEASE'
-    compile group: 'org.springframework.security', name: 'spring-security-core', version: '4.2.17.RELEASE'
+    // Grails 5
+    implementation group: 'org.springframework.security', name: 'spring-security-ldap', version: '5.7.4'
+    implementation group: 'org.springframework.security', name: 'spring-security-config', version: '5.7.4'
+    implementation group: 'org.springframework.security', name: 'spring-security-web', version: '5.7.4'
+    implementation group: 'org.springframework.security', name: 'spring-security-core', version: '5.7.4'
 
-    runtime 'org.apache.directory.server:apacheds-core:1.5.5',
-            'org.apache.directory.server:apacheds-protocol-ldap:1.5.5',
-            'org.apache.directory.shared:shared-ldap:0.9.17'
-    provided 'net.sourceforge.jtds:jtds:1.2.4'
+    implementation "com.unboundid:unboundid-ldapsdk"
+//    runtimeOnly 'org.apache.directory.server:apacheds-core:1.5.5',
+//            'org.apache.directory.server:apacheds-protocol-ldap:1.5.5',
+//            'org.apache.directory.shared:shared-ldap:0.9.17'
+//    provided 'net.sourceforge.jtds:jtds:1.2.4'
+    implementation 'net.sourceforge.jtds:jtds:1.2.4'
     //
 
     //Plugins
@@ -77,32 +82,36 @@ dependencies {
 //        exclude "junit"
 //    }
 
-    compile 'org.grails.plugins:spring-security-core:3.2.3'
+    implementation 'org.grails.plugins:spring-security-core:5.2.0'
     //
 }
 
 bootRun {
     jvmArgs('-Dspring.output.ansi.enabled=always')
-    addResources = true
+    sourceResources sourceSets.main
     String springProfilesActive = 'spring.profiles.active'
     systemProperty springProfilesActive, System.getProperty(springProfilesActive)
 }
 // enable if you wish to package this plugin as a standalone application
-bootRepackage.enabled = false
-grailsPublish {
-    // TODO: Provide values here
-    user = 'user'
-    key = 'key'
-    githubSlug = 'foo/bar'
-    license {
-        name = 'Apache-2.0'
+bootJar.enabled = false
+
+//assets {
+//    packagePlugin = true
+//}
+
+
+publishing {
+    publications {
+        maven(MavenPublication) {
+            versionMapping {
+                usage('java-api') {
+                    fromResolutionOf('runtimeOnlyClasspath')
+                }
+                usage('java-runtimeOnly') {
+                    fromResolutionResult()
+                }
+            }
+            from components.java
+        }
     }
-    title = "My Plugin"
-    desc = "Full plugin description"
-    developers = [johndoe:"John Doe"]
-}
-
-
-assets {
-    packagePlugin = true
 }
