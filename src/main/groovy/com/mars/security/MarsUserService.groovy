@@ -11,6 +11,7 @@ import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.security.ldap.userdetails.UserDetailsContextMapper
+import groovy.sql.Sql
 
 @Transactional
 class MarsUserService implements UserDetailsContextMapper{
@@ -40,15 +41,18 @@ class MarsUserService implements UserDetailsContextMapper{
 
 		//look up user profile in database
 		def user = userMapper.findUserByUsername(username)
+		Map userAttributes = userAttribsFromLdapContext(ctx,username)
+
 		//Create the user profile if it does not already exist
 		if(!user){
-
-			Map userAttributes = userAttribsFromLdapContext(ctx,username)
 			LOGGER.debug "User Attributes: $userAttributes"
 			user = userMapper.newUser(
 					username,
 					userAttributes)
 		}
+
+		// Save user information to CAS database person table
+		saveUserToCasDatabase(username, userAttributes.firstName, userAttributes.lastName, userAttributes.email == "No Email" ? null : userAttributes.email)
 
 		authorities = authoritiesForUsername(username)
 
@@ -62,6 +66,57 @@ class MarsUserService implements UserDetailsContextMapper{
 		String email = ctx.getStringAttribute('mail')?:'No Email'
 
 		return[firstName:firstName, lastName:lastName, email:email]
+	}
+
+		/**
+	 * Saves user information to the CAS database person table
+	 */
+	private void saveUserToCasDatabase(String username, String firstName, String lastName, String email) {
+		try {
+			// Use the same data source that's used for role lookups
+			Sql sql = new Sql(userRoleService.casDataSource)
+
+			// Check if user already exists in person table
+			def existingPerson = sql.firstRow("SELECT * FROM person WHERE username = :username", [username: username])
+			
+			// Get current timestamp in SQL format
+			java.sql.Timestamp currentTimestamp = new java.sql.Timestamp(System.currentTimeMillis())
+
+			if (existingPerson) {
+				// Update existing record
+				sql.executeUpdate("""
+					UPDATE person 
+					SET first_name = :firstName, 
+						last_name = :lastName, 
+						email = :email,
+						last_updated = :lastUpdated
+					WHERE username = :username
+				""", [
+					firstName: firstName,
+					lastName: lastName,
+					email: email,
+					lastUpdated: currentTimestamp,
+					username: username
+				])
+				LOGGER.debug "Updated user $username in CAS person table"
+			} else {
+				// Insert new record
+				sql.executeInsert("""
+					INSERT INTO person (username, first_name, last_name, email, last_updated)
+					VALUES (:username, :firstName, :lastName, :email, :lastUpdated)
+				""", [
+					username: username,
+					firstName: firstName,
+					lastName: lastName,
+					email: email,
+					lastUpdated: currentTimestamp
+				])
+				LOGGER.debug "Inserted user $username into CAS person table"
+			}
+		} catch (Exception e) {
+			LOGGER.error "Failed to save user to CAS database: ${e.message}", e
+			// Don't throw the exception - we still want authentication to succeed
+		}
 	}
 
 	private Collection authoritiesForUsername(String username){
